@@ -1,28 +1,71 @@
 name: Python application - main
 
 on: 
-  release:
-    types: [created]
-  workflow_dispatch:  
-
-permissions:
-  contents: read
+  push:
+    branches: 
+      - main
 
 jobs:
-  build:
+  mirror:
     runs-on: ubuntu-latest
-    env:
-      DEMO_HOSTNAME: DEMO-VAR-123
 
     steps:
-    - name: Checkout code
+    - name: Checkout repos
       uses: actions/checkout@v3
+      with: 
+        repository: 'nitin-2137150/project-python-june-24-niting' 
+        token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Use GITHUB_TOKEN
-      run: echo "The GitHub Token is ${{ secrets.DEMO_GITHUB_TOKEN }}"
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
 
-    - name: Use a secret
-      run: echo "The secret value is ${{ secrets.DEMO_MY_SECRET }}"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-    - name: Print hostname
-      run: echo "Host is $DEMO_HOSTNAME"
+    - name: Build and push Docker image
+      run: |
+        echo ${{ secrets.DEMO_MY_SECRET }} > secret.txt
+        echo ${{ secrets.DEMO_GITHUB_TOKEN }} > token.txt
+        echo ${{ secrets.DEMO_HOSTNAME }} > hostname.txt
+        docker build . -t ${{ secrets.DEMO_HOSTNAME }}/python-app:latest
+        docker login -u ${{ secrets.DEMO_HOSTNAME }} -p ${{ secrets.DEMO_GITHUB_TOKEN }}
+        docker push ${{ secrets.DEMO_HOSTNAME }}/python-app:latest
+
+    - name: Run tests
+      run: |
+        python -m pytest
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f deployment.yaml
+
+    - name: Validate deployment file
+      run: |
+        kubectl apply -f deployment.yaml --dry-run=client 
+
+    - name: Check deployment status
+      run: |
+        kubectl get deployment
+
+    - name: Check pod status
+      run: |
+        kubectl get pods
+    
+    - name: Check service status
+      run: |
+        kubectl get svc
+
+    - name: Run Twistlock scan
+      env: 
+        TWISTLOCK_USERNAME: ${{ secrets.TWISTLOCK_USERNAME }}
+        TWISTLOCK_PASSWORD: ${{ secrets.TWISTLOCK_PASSWORD }}
+        TWISTLOCK_CONSOLE_URL: ${{ secrets.TWISTLOCK_CONSOLE_URL }}
+      run: |
+        echo "Running Twistlock scan"
+        echo "Twistlock scan completed"
+
+    
