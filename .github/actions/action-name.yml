@@ -1,0 +1,12 @@
+name: 'My Custom Action'
+description: 'Description of my custom action'
+inputs:
+  input1:
+    description: 'Description of input1'
+    required: true
+outputs:
+  output1: 
+    description: 'Description of output1'
+runs:
+  using: 'node-v16.14.0'
+  main: 'index.js' #Write the action logic in this file, this file should contain the JavaScript code that defines what your action does.
