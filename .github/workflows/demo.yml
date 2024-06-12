@@ -1,0 +1,28 @@
+name: Python application - main
+
+on: 
+  release:
+    types: [created]
+  workflow_dispatch:  
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DEMO_HOSTNAME: DEMO-VAR-123
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Use GITHUB_TOKEN
+      run: echo "The GitHub Token is ${{ secrets.DEMO_GITHUB_TOKEN }}"
+
+    - name: Use a secret
+      run: echo "The secret value is ${{ secrets.DEMO_MY_SECRET }}"
+
+    - name: Print hostname
+      run: echo "Host is $DEMO_HOSTNAME"
