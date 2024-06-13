@@ -21,14 +21,34 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Coding Standards Check
+      run: |
+          echo "Code is scanned for the errors"
+
+    - name: Static Code Analysis
+      run: |
+        echo "Static code analysis are done"
+
+    - name: External Library Vulnerability Analysis
+      run: |
+        echo "Vulnerability scan results are published"
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Build and push Docker image
+    - name: Build Code
       run: |
-        echo "Docker file is builed and pushed to docker registry"
+        echo "Jar file is created"
+        
+    - name: Unit Test
+      run: |
+        echo "Testing is completed"
+
+    - name: Create Docker Image
+      run: |
+        echo "Docker image is created"
         # echo ${{ secrets.DEMO_MY_SECRET }} > secret.txt
         # echo ${{ secrets.DEMO_GITHUB_TOKEN }} > token.txt
         # echo ${{ secrets.DEMO_HOSTNAME }} > hostname.txt
@@ -36,14 +56,32 @@ jobs:
         # docker login -u ${{ secrets.DEMO_HOSTNAME }} -p ${{ secrets.DEMO_GITHUB_TOKEN }}
         # docker push ${{ secrets.DEMO_HOSTNAME }}/python-app:latest
 
-    - name: Run tests
+    - name: Push Docker image
       run: |
-        echo "All tests are executed"
-        # python -m pytest
+        echo "Docker file is pushed to docker registry"
 
-    - name: Deploy to Kubernetes
+    - name: Scan Docker image for vulneability
       run: |
-        echo "Deployed to K8s"
+        echo "Docker image is scanned"
+
+    - name: Deploy to DEV
+      run: |
+        echo "Deployed to DEV environment"
+        # kubectl apply -f deployment.yaml
+
+    - name: Deploy to ST
+      run: |
+          echo "Deployed to ST environment"
+          # kubectl apply -f deployment.yaml
+
+    - name: Deploy to SIT
+      run: |
+          echo "Deployed to SIT environment"
+          # kubectl apply -f deployment.yaml
+
+    - name: Deploy to UAT
+      run: |
+        echo "Deployed to UAT environment"
         # kubectl apply -f deployment.yaml
 
     - name: Validate deployment file
