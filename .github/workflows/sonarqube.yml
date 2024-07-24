@@ -33,7 +33,6 @@ jobs:
       run: |
         PR_NUMBER=${{ github.event.pull_request.number }}
         REPORT_URL=$(cat report_url.txt)
-
         # Post comment on the pull request
         COMMENT="SonarQube analysis report: $REPORT_URL"
         gh pr comment $PR_NUMBER --body "$COMMENT"
