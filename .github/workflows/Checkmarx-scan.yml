@@ -15,7 +15,6 @@ jobs:
 
     - name: Set up Checkmarx CLI
       run: |
-        # Install Checkmarx CLI here
         curl -L https://example.com/path/to/checkmarx-cli -o checkmarx-cli.tar.gz
         tar -xzvf checkmarx-cli.tar.gz
         sudo mv checkmarx-cli /usr/local/bin/
@@ -24,12 +23,14 @@ jobs:
         CHECKMARX_URL: ${{ secrets.CHECKMARX_URL }}
 
     - name: Run Checkmarx Scan
-      run: |
-        checkmarx scan --url ${{ secrets.CHECKMARX_URL }} --token ${{ secrets.CHECKMARX_API_TOKEN }} --project "your-project-name"
+      uses: checkmarx/checkmarx-action@v1
+      with:
+        api-token: ${{ secrets.CHECKMARX_API_TOKEN }}
+        url: ${{ secrets.CHECKMARX_URL }}
+        project: "Nmg-project"
 
     - name: Post PR Comment
       run: |
-        # Replace this with your logic to check scan results and report status
         echo "Checkmarx scan completed. Check the details for any issues." > result.txt
         gh pr comment ${{ github.event.pull_request.number }} --body "$(cat result.txt)"
       env:
