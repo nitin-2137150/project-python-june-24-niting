@@ -1,1 +1,40 @@
 name: Java test with maven
+
+on: 
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repos
+      uses: actions/checkout@v3
+      with: 
+        repository: 'nitin-2137150/project-python-june-24-niting' 
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+
+    - name: Build and test
+      run: | 
+        echo "mvn clean verify"
+
+    - name: Generate code coverage report
+      run: | 
+        echo "mvn junit report"
+
+    - name: Check code coverage
+      run: | 
+        echo "code coverage is above 80%"
+
+
+    
