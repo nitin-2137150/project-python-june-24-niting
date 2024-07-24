@@ -26,15 +26,29 @@ jobs:
 
     - name: Build and test
       run: | 
-        echo "mvn clean verify"
+        echo "mvn clean verify sonar:sonar -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}"
 
-    - name: Generate code coverage report
+    - name: Generate JUnit test report
       run: | 
         echo "mvn junit report"
 
-    - name: Check code coverage
-      run: | 
-        echo "code coverage is above 80%"
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: target/surefire-reports/
 
+    - name: Display test results
+      run: cat target/surefire-reports/*.xml
+
+    - name: Upload sonarqube code coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        files: build/report/jacoco/test/TestCoverage.xml
+        token: $ {{ secrets.CODECOV_TOKEN }}
+
+    - name: Display code coverage summary
+      run: |
+        echo "Code coverage: $COVERAGE"
 
     
