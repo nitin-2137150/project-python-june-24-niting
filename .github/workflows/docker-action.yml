@@ -8,7 +8,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Run docker action
-      uses: ./.github/actions/my-docker-action
+    - name: Run Login
+      uses: docker/login-action@v3.3.0
       with:
         name: 'GitHub User'
+          
