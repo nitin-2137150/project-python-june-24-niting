@@ -1,0 +1,38 @@
+name: Checkmarx Scan
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopen]
+
+jobs:
+  checkmarx:
+    name: Run Checkmarx Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Checkmarx CLI
+      run: |
+        curl -L https://checkmarx.com/download/cli | bash
+
+    - name: Run Checkmarx Scan
+      env:
+        CHECKMARX_API_TOKEN: ${{ secrets.CHECKMARX_API_TOKEN }}
+        CHECKMARX_URL: ${{ secrets.CHECKMARX_URL }}
+      run: |
+        checkmarx scan --url $CHECKMARX_URL --token $CHECKMARX_API_TOKEN --project "your-project-name"
+
+    - name: Check for scan results
+      run: |
+        # Replace this with your logic to check scan results and report status
+        echo "Checkmarx scan completed and results are being processed"
+
+    - name: Post PR Comment
+      run: |
+        echo "Checkmarx scan completed. Check the details for any issues." > result.txt
+        gh pr comment ${{ github.event.pull_request.number }} --body "$(cat result.txt)"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
