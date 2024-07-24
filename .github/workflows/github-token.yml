@@ -1,0 +1,14 @@
+name: GitHub Token
+
+on: [pull_request]
+
+jobs:
+  create_github_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use GitHub Token
+        run: |
+          echo "The GitHub Token is ${{ secrets.GITHUB_TOKEN }}"
