@@ -16,7 +16,8 @@ jobs:
     - name: Install Checkmarx CLI
       run: |
         curl -L https://example.com/path/to/checkmarx-cli -o checkmarx-cli.tar.gz
-        tar -xzvf checkmarx-cli.tar.gz
+        file checkmarx-cli.tar.gz  # Check the file type
+        tar -xzvf checkmarx-cli.tar.gz  # Adjust extraction method if needed
         sudo mv checkmarx-cli /usr/local/bin/
       env:
         CHECKMARX_API_TOKEN: ${{ secrets.CHECKMARX_API_TOKEN }}
@@ -24,7 +25,7 @@ jobs:
 
     - name: Run Checkmarx Scan
       run: |
-        checkmarx scan --url ${{ secrets.CHECKMARX_URL }} --token ${{ secrets.CHECKMARX_API_TOKEN }} --project "your-project-name"
+        checkmarx scan --url ${{ secrets.CHECKMARX_URL }} --token ${{ secrets.CHECKMARX_API_TOKEN }} --project "nmg-project"
 
     - name: Post PR Comment
       run: |
@@ -32,3 +33,4 @@ jobs:
         gh pr comment ${{ github.event.pull_request.number }} --body "$(cat result.txt)"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
