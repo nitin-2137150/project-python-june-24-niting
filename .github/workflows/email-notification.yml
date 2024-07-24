@@ -1,0 +1,30 @@
+name: Notify QA Lead on Pull Request
+
+on: 
+  pull_request:
+    types: [opened] 
+    branches:
+      - master
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repos
+      uses: actions/checkout@v3
+      with: 
+        repository: 'nitin-2137150/project-python-june-24-niting' 
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Send email notification
+      uses: niting/action-send-mail@v3
+      with:
+        server_address: smtp.email-provider.com
+        server_port: 587
+        username: ${{ secrets.SMTP_USERNAME }}
+        password: ${{ secrets.SMTP_PASSWORD }}
+        subject: 'Pull request opened to merge develop into master'
+        body: 'A new pull request has been raised to merge code from develop branch to master branch'
+        to: 'vijay@email.com, lalit@email.com'
+        from: 'nitin@email.com'
