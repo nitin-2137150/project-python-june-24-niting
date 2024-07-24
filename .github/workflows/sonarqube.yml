@@ -38,4 +38,4 @@ jobs:
         COMMENT="Dummy SonarQube analysis report: $REPORT_URL"
         gh pr comment $PR_NUMBER --body "$COMMENT"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
