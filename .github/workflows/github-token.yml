@@ -11,4 +11,6 @@ jobs:
 
       - name: Use GitHub Token
         run: |
-          echo "The GitHub Token is ${{ secrets.GITHUB_TOKEN }}"
+          echo "Using GitHub Token"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
