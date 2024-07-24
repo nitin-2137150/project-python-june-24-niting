@@ -30,3 +30,4 @@ jobs:
       with:
         path: blackduck-report.txt
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        append: false
