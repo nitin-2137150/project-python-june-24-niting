@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Checkmarx CLI
+    - name: Install Checkmarx CLI
       run: |
         curl -L https://example.com/path/to/checkmarx-cli -o checkmarx-cli.tar.gz
         tar -xzvf checkmarx-cli.tar.gz
@@ -23,11 +23,8 @@ jobs:
         CHECKMARX_URL: ${{ secrets.CHECKMARX_URL }}
 
     - name: Run Checkmarx Scan
-      uses: checkmarx/checkmarx-action@v1
-      with:
-        api-token: ${{ secrets.CHECKMARX_API_TOKEN }}
-        url: ${{ secrets.CHECKMARX_URL }}
-        project: "Nmg-project"
+      run: |
+        checkmarx scan --url ${{ secrets.CHECKMARX_URL }} --token ${{ secrets.CHECKMARX_API_TOKEN }} --project "your-project-name"
 
     - name: Post PR Comment
       run: |
