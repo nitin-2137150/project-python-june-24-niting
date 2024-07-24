@@ -2,7 +2,7 @@ name: Checkmarx Scan
 
 on:
   pull_request:
-    types: [opened, synchronize, reopen]
+    types: [opened, synchronize, reopened]
 
 jobs:
   checkmarx:
@@ -13,26 +13,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Checkmarx CLI
+    - name: Set up Checkmarx CLI
       run: |
-        curl -L https://checkmarx.com/download/cli | bash
-
-    - name: Run Checkmarx Scan
+        # Install Checkmarx CLI here
+        curl -L https://example.com/path/to/checkmarx-cli -o checkmarx-cli.tar.gz
+        tar -xzvf checkmarx-cli.tar.gz
+        sudo mv checkmarx-cli /usr/local/bin/
       env:
         CHECKMARX_API_TOKEN: ${{ secrets.CHECKMARX_API_TOKEN }}
         CHECKMARX_URL: ${{ secrets.CHECKMARX_URL }}
-      run: |
-        checkmarx scan --url $CHECKMARX_URL --token $CHECKMARX_API_TOKEN --project "your-project-name"
 
-    - name: Check for scan results
+    - name: Run Checkmarx Scan
       run: |
-        # Replace this with your logic to check scan results and report status
-        echo "Checkmarx scan completed and results are being processed"
+        checkmarx scan --url ${{ secrets.CHECKMARX_URL }} --token ${{ secrets.CHECKMARX_API_TOKEN }} --project "your-project-name"
 
     - name: Post PR Comment
       run: |
+        # Replace this with your logic to check scan results and report status
         echo "Checkmarx scan completed. Check the details for any issues." > result.txt
         gh pr comment ${{ github.event.pull_request.number }} --body "$(cat result.txt)"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
