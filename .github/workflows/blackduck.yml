@@ -25,7 +25,7 @@ jobs:
         name: blackduck-report
         path: blackduck-report.txt
 
-    - name: Post Comment with Report
+    - name: Post Black Duck Report
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         path: blackduck-report.txt
