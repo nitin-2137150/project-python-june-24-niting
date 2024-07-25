@@ -12,6 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Handle Webhook
+      - name: Run build
         run: |
-          echo "Webhook received"
+          echo "Building the project..."
