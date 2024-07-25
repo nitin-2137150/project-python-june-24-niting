@@ -1,0 +1,17 @@
+name: Webhooks
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Handle Webhook
+        run: |
+          echo "Webhook received"
